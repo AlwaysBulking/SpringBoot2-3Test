@@ -1,0 +1,417 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  contact:
+    email: latusikl@gmail.com
+  title: Sample service
+  description: This is a specification of the API that should be provided by the service that will be the subject of performance tests. Be advised as the main purpose of this application is performance testing for simplicity by default URLs do not use HTTPS.
+servers:
+  - url: http://{address}:{port}/{prefix}
+    variables:
+      address:
+        description: "Domain or the IP address of the deployed service that implements specified API."
+        default: ""
+      port:
+        description: "The port on which the service is available."
+        default: "8082"
+      prefix:
+        description: "Common endpoints prefix"
+        default: api
+tags:
+  - name: Greeting
+    description: Receive a greeting.
+  - name: Sorting
+    description: Sort array of integers using different sorting algorithms.
+  - name: Notes
+    description: Create and retrieve secured note.
+  - name: Database
+    description: Set of simple CRUD operation on user entity.
+paths:
+  /greetings/single:
+    get:
+      tags:
+        - Greeting
+      summary: Returns single greeting message.
+      responses:
+        '200':
+          description: Successful greeting reponse.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingDto"
+        default:
+          $ref: "#/components/responses/default"
+  /greetings/single/{delayInMilliseconds}:
+    get:
+      tags:
+        - Greeting
+      summary: Returns single greeting message with minimal delay.
+      parameters:
+        - $ref: "#/components/parameters/delayParam"
+      responses:
+        '200':
+          description: Successful greeting reponse.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingDto"
+        default:
+          $ref: "#/components/responses/default"
+  /greetings/sse:
+    get:
+      tags:
+        - Greeting
+      summary: Server side events endpoint that sends predefined count of greetings.
+      responses:
+        '200':
+          description: "Successful response with greetings."
+          content:
+            text/event-stream:
+              schema:
+                $ref: "#/components/schemas/GreetingSSE"
+        default:
+          $ref: "#/components/responses/default"
+  /sort/sorters:
+    post:
+      tags:
+        - Sorting
+      summary: Send array of integer to sort using specified strategy.
+      parameters:
+        - name: direction
+          in: query
+          required: false
+          description: Allows to choose sorting direction.
+          schema:
+            type: string
+            enum:
+              - ASCENDING
+              - DESCENDING
+            default: ASCENDING
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SortingRequestDto"
+      responses:
+        '200':
+          description: Sorted array of passed values.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SortingResponseDto"
+        default:
+          $ref: "#/components/responses/default"
+  /notes:
+    post:
+      tags:
+        - Notes
+      summary: Create encrypted Note with specified cotent.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteDto"
+      responses:
+        '200':
+          description: Information about created note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoteResponseDto"
+        default:
+          $ref: "#/components/responses/default"
+  /notes/{noteId}:
+    get:
+      tags:
+        - Notes
+      summary: Retrieve created note.
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          description: UUID of the created note.
+          schema:
+            type: string
+            format: uuid
+        - name: noteKey
+          in: query
+          required: true
+          description: Key that allows note decryption.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Decrypted note content.
+          content:
+            text/plain:
+              schema:
+                type: string
+        default:
+          $ref: "#/components/responses/default"
+  /users:
+    post:
+      tags:
+        - Database
+      summary: Create user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto"
+      responses:
+        '200':
+          description: Created user UUID and resource link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserCreationResponseDto"
+        default:
+          $ref: "#/components/responses/default"
+  /users/{userId}:
+    get:
+      tags:
+        - Database
+      summary: Retrieve user's data.
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      responses:
+        '200':
+          description: Data of the user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        '404':
+          description: Not found.
+        default:
+          $ref: "#/components/responses/default"
+    put:
+      tags:
+        - Database
+      summary: Update all user data.
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPutDto"
+      responses:
+        '200':
+          description: User data updated.
+        '404':
+          description: Not found.
+        default:
+          $ref: "#/components/responses/default"
+    patch:
+      tags:
+        - Database
+      summary: Partial update of the user data.
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserPatchDto"
+      responses:
+        '200':
+          description: User data updated.
+        '404':
+          description: Not found.
+        default:
+          $ref: "#/components/responses/default"
+    delete:
+      tags:
+        - Database
+      summary: Delete user.
+      parameters:
+        - $ref: "#/components/parameters/userIdParam"
+      responses:
+        '204':
+          description: User deleted.
+        '404':
+          description: Not found.
+        default:
+          $ref: "#/components/responses/default"
+components:
+  schemas:
+    GreetingDto:
+      type: object
+      properties:
+        value:
+          type: string
+      example:
+        value: Hello!
+    GreetingSSE:
+      type: array
+      format: event-stream
+      items:
+        $ref: "#/components/schemas/GreetingDto"
+    SortingRequestDto:
+      type: object
+      required:
+        - data
+        - strategy
+      properties:
+        data:
+          type: array
+          items:
+            type: integer
+            format: int64
+        strategy:
+          type: string
+          enum:
+            - QUICKSORT
+            - MERGE_SORT
+            - HEAP_SORT
+      example:
+        data: [50, -100, 200, 69, 17]
+        strategy: QUICKSORT
+    SortingResponseDto:
+      type: object
+      required:
+        - sortedData
+      properties:
+        sortedData:
+          type: array
+          items:
+            type: integer
+            format: int64
+      example:
+        sortedData: [-100, 17, 50, 69, 200]
+    NoteDto:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          minimum: 1
+          maximum: 4296
+      example:
+        value: "This is sample note content to be saved."
+    NoteResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        expireAt:
+          type: string
+          format: date-time
+        link:
+          type: string
+      example:
+        id: 823f077a-e33d-435f-a3d1-ccdbbe951c61
+        key: "RLiflHBVgMcXUrEJYrHgHMa5JRogRxa7EXJq713pwjM=:X5xs1Ohh-kRPDiAD-cX--A=="
+        expireAt: "2022-03-28T16:59:10.066628326"
+        link: "/api/notes/337fe72a-d5d8-4346-bcf8-341343159982?noteKey=RLiflHBVgMcXUrEJYrHgHMa5JRogRxa7EXJq713pwjM=:X5xs1Ohh-kRPDiAD-cX--A=="
+    UserDto:
+      type: object
+      required:
+        - email
+        - password
+        - name
+        - surname
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        surname:
+          type: string
+      example:
+        email: user@example.com
+        password: P@ssw0rd
+        name: John
+        surname: Doe
+    UserCreationResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        link:
+          type: string
+      example:
+        id: 19930cd4-c81c-42ca-8063-4e0bed1a9003
+        link: "/api/users/19930cd4-c81c-42ca-8063-4e0bed1a9003"
+    UserPutDto:
+      type: object
+      required:
+        - password
+        - name
+        - surname
+      properties:
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        surname:
+          type: string
+      example:
+        password: P@ssw0rd123
+        name: Johnny
+        surname: Doe2
+    UserPatchDto:
+      type: object
+      properties:
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        surname:
+          type: string
+      example:
+        name: Johnny
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  parameters:
+    delayParam:
+      name: delayInMilliseconds
+      in: path
+      description: Value of the minimal delay (in miliseconds) after which the response should be returned.
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+        default: 500
+    userIdParam:
+      name: userId
+      in: path
+      description: UUID of the user that the given operation conecers.
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    default:
+      description: Unexpected error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
