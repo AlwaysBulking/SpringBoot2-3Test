@@ -1,5 +1,6 @@
 name: Build quarkus-reactive
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - opened
@@ -19,6 +20,6 @@ on:
       - '!quarkus/quarkus-reactive/graldew'
 jobs:
   build-and-test:
-    uses: latusikl/comparative-analysis/.github/workflows/build-test-gradle.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    uses: latusikl/jvm-frameworks-comparative-assessment/.github/workflows/build-test-gradle.yml@develop
     with:
       application-dir: quarkus/quarkus-reactive

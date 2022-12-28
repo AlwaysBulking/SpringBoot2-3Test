@@ -7,7 +7,7 @@ public class Properties {
 	private static final String BASE_URL_PROP = "baseUrl";
 	private static final String STRESS_SINGLE_GREETING_USERS = "sgUsr";
 	private static final String STRESS_SINGLE_GREETING_TIME = "sgTime";
-	private static final String DEFAULT_SINGLE_GREETING_USERS = "8000";
+	private static final String DEFAULT_SINGLE_GREETING_USERS = "20000";
 	private static final String DEFAULT_SINGLE_GREETING_TIME = "10";
 
 	private static final String STRESS_SINGLE_GREETING_DELAY_USERS = "sgdUsr";
@@ -17,7 +17,7 @@ public class Properties {
 
 	private static final String STRESS_SSE_GREETING_USERS = "sseUsr";
 	private static final String STRESS_SSE_GREETING_TIME = "sseTime";
-	private static final String DEFAULT_SSE_GREETING_USERS = "5000";
+	private static final String DEFAULT_SSE_GREETING_USERS = "15000";
 	private static final String DEFAULT_SSE_GREETING_TIME = "10";
 
 	private static final String STRESS_MEDIUM_NUM_SET_SORT_USERS = "sortmUsr";
@@ -27,7 +27,7 @@ public class Properties {
 
 	private static final String STRESS_CREATE_FETCH_DELETE_USERS = "dbcrdUsr";
 	private static final String STRESS_CREATE_FETCH_DELETE_TIME = "dbcrdTime";
-	private static final String DEFAULT_STRESS_CREATE_FETCH_DELETE_USERS = "5000";
+	private static final String DEFAULT_STRESS_CREATE_FETCH_DELETE_USERS = "20000";
 	private static final String DEFAULT_STRESS_CREATE_FETCH_DELETE_TIME = "10";
 
 	public static String baseUrl() {
