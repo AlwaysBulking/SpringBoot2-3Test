@@ -20,7 +20,7 @@ jobs:
       USR: ${{ secrets.DOCKER_USR }}
       KEY: ${{ secrets.DOCKER_KEY }}
   build-image-and-publish-native:
-    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@main
     with:
       application-dir: base-images
       image-tag: base-debian-jdk17-graal20.0.0.2-gradle7.4.1
