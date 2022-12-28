@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: pl.latusikl
+testFramework: spock
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, data, data-r2dbc, graalvm, gradle, hibernate-validator, http-client, jackson-databind, java, java-application, logback, lombok, micronaut-build, netty-server, postgres, r2dbc, reactor, reactor-http-client, readme, shade, spock, testcontainers, yaml]

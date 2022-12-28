@@ -1,0 +1,45 @@
+micronaut:
+  application:
+    name: micronautReactive
+  server:
+    port: 8082
+    context-path: /api
+  http:
+    client:
+      read-timeout: 30s
+#logger:
+#  levels:
+#    io:
+#      micronaut:
+#        http:
+#          client: DEBUG
+r2dbc:
+  datasources:
+    default:
+      dialect: POSTGRES
+      url: r2dbc:postgresql://${DB_URL}/${DB_NAME}?schema=${DB_SCHEMA}
+      username: ${DB_USR}
+      password: ${DB_PSW}
+      options:
+        driver: pool
+        protocol: postgresql
+        poolName: r2dbc-pool
+
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+greetings:
+  sse-count: 10
+google:
+  api:
+    user-email: ${SERVICE_USR_EMAIL}
+    private-key: ${PRIVATE_KEY}
+    scopes: ${SCOPES}
+    storage-api-url: https://storage.googleapis.com
+    auth-url: https://oauth2.googleapis.com/token
+    grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+    bucket-name: ${BUCKET_NAME}
+code:
+  days-till-removal: 30
