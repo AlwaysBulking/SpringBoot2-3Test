@@ -13,7 +13,7 @@ Used during the build of the application that is based on the JAR file. Deployed
 - JDK 17
 - Gradle 7.4.1
 
-### Dockerfile-jar 
+### Dockerfile-native 
 Used during the build of the application that is based on the native image file. Deployed image can be found under the tag [base-debian-jdk17-graal20.0.0.2-gradle7.4.1](https://hub.docker.com/layers/latusikl/comparative-analysis/base-debian-jdk17-graal20.0.0.2-gradle7.4.1/images/sha256-5af7319fba197f202e7e858da215127df9322f648f77ef1723f28982bcdf08a0?context=explore).
 
 #### Included tools:
