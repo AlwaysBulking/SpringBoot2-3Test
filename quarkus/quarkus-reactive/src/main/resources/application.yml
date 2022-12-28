@@ -1,0 +1,27 @@
+quarkus:
+  http:
+    port: 8082
+  rest-client:
+    google-web-client:
+      url: https://storage.googleapis.com
+    google-token-web-client:
+      url: https://oauth2.googleapis.com
+  datasource:
+    password: ${DB_PSW}
+    username: ${DB_USR}
+    db-kind: postgresql
+    reactive:
+      url: postgresql://${DB_URL}/${DB_NAME}?search_path=${DB_SCHEMA}
+greetings:
+  sse-count: 10
+
+google:
+  api:
+    user-email: ${SERVICE_USR_EMAIL}
+    private-key: ${PRIVATE_KEY}
+    scopes: ${SCOPES}
+    grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+    bucket-name: ${BUCKET_NAME}
+    auth-url: ${quarkus.rest-client.google-token-web-client.url}/token
+code:
+  days-till-removal: 30

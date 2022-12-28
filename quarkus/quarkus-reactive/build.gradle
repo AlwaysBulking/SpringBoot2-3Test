@@ -1,0 +1,47 @@
+plugins {
+	id 'java'
+	id 'io.quarkus'
+	id 'io.freefair.lombok' version '6.3.0'
+	id 'com.adarshr.test-logger' version '3.1.0'
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+	implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
+	implementation 'io.quarkus:quarkus-rest-client-reactive'
+	implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
+	implementation 'io.quarkus:quarkus-hibernate-validator'
+	implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
+	implementation 'io.quarkus:quarkus-resteasy-reactive'
+	implementation 'io.quarkus:quarkus-config-yaml'
+	implementation 'io.quarkus:quarkus-reactive-pg-client'
+	implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
+	implementation 'io.quarkus:quarkus-arc'
+
+	implementation('com.auth0:java-jwt:3.18.3')
+
+	testImplementation 'io.quarkus:quarkus-junit5'
+	testImplementation 'io.rest-assured:rest-assured'
+}
+
+group 'pl.latusikl'
+version ''
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava {
+	options.encoding = 'UTF-8'
+	options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+	options.encoding = 'UTF-8'
+}
