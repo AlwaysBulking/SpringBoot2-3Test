@@ -19,6 +19,6 @@ on:
       - '!quarkus/quarkus-reactive/graldew'
 jobs:
   build-and-test:
-    uses: latusikl/comparative-analysis/.github/workflows/build-test-gradle.yml@develop
+    uses: latusikl/jvm-frameworks-comparative-assessment/.github/workflows/build-test-gradle.yml@develop
     with:
       application-dir: quarkus/quarkus-reactive

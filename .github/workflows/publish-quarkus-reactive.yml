@@ -13,7 +13,7 @@ on:
       - '!quarkus/quarkus-reactive/graldew'
 jobs:
   build-image-and-publish:
-    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@main
+    uses: latusikl/jvm-frameworks-comparative-assessment/.github/workflows/publish-image.yml@main
     with:
       application-dir: quarkus/quarkus-reactive
       image-tag: quarkus-reactive
