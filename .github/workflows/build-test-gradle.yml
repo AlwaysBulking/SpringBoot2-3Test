@@ -1,0 +1,42 @@
+name: Build Gradle Application
+on:
+  workflow_call:
+    inputs:
+      application-dir:
+        description: 'Subdirectory that contains the application'
+        required: true
+        type: string
+      gradle-version:
+        description: 'Gradle version that will be used during the build'
+        required: false
+        default: 7.2
+        type: number
+      java-version:
+        description: 'Java version that will be used during the build'
+        required: false
+        default: '17'
+        type: string
+jobs:
+  Build-and-test-gradle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ inputs.java-version }}
+          distribution: 'temurin'
+      - name: Build project
+        uses: gradle/gradle-build-action@v2
+        with:
+            gradle-version: ${{ inputs.gradle.version }}
+            arguments: build -x test
+            build-root-directory: ${{ inputs.application-dir }}
+
+      - name: Execute tests
+        uses: gradle/gradle-build-action@v2
+        with:
+            gradle-version: ${{ inputs.gradle.version }}
+            arguments: test
+            build-root-directory: ${{ inputs.application-dir }}

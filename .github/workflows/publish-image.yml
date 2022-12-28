@@ -1,0 +1,46 @@
+name: Publish Docker image
+on:
+  workflow_call:
+    inputs:
+      application-dir:
+        description: 'Subdirectory that contains application and Dockerfile'
+        required: true
+        type: string
+      image-tag:
+        description: 'Name of the image that will be build'
+        required: true
+        type: string
+      dockerfile-name:
+        description: 'Name of the Dockerfile used for build'
+        required: false
+        type: string
+        default: Dockerfile
+    secrets:
+      REGISTRY:
+        required: true
+      USR:
+        required: true
+      KEY:
+        required: true
+        
+jobs:
+  build-image-and-publish:
+    name: Build Docker image and publish in the registry.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Log in to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.USR }}
+          password: ${{ secrets.KEY }}
+      - name: Build and push image to registry
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ inputs.application-dir }}
+          push: true
+          tags: ${{ secrets.REGISTRY }}:${{ inputs.image-tag }}
+          file: ${{ inputs.application-dir }}/${{ inputs.dockerfile-name }}
+      
+      
