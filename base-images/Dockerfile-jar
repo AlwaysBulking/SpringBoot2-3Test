@@ -1,0 +1,24 @@
+FROM openjdk:17-slim-bullseye
+
+WORKDIR /opt
+ARG GRADLE_VERSION=7.4.1
+
+LABEL description="Image based on openjdk:17-slim-bullseye with Gradle build tool installed."
+LABEL gradle.version=$GRADLE_VERSION
+LABEL java.version=$JAVA_VERSION
+LABEL maintainer=latusikl@gmail.com
+
+ENV PATH=/opt/gradle-$GRADLE_VERSION/bin:$PATH
+
+RUN apt-get update \
+    && apt-get install wget unzip -y \
+    && wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
+    && unzip gradle-$GRADLE_VERSION-bin.zip \
+    && rm gradle-$GRADLE_VERSION-bin.zip \
+    && apt-get purge wget -y \
+    && apt-get purge unzip -y \
+    && apt-get autoclean \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD java -version && gradle -v

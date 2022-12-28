@@ -1,0 +1,32 @@
+FROM debian:bullseye
+WORKDIR /opt
+
+ARG JAVA_VERSION=17
+ARG GRAAL_VERSION=22.0.0.2
+ARG GRADLE_VERSION=7.4.1
+
+LABEL description="Image based on debian:bullseye for building GraalVM native images using predefined by framework Gradle tasks."
+LABEL gradle.version=$GRADLE_VERSION
+LABEL java.version=$JAVA_VERSION
+LABEL graal.version=$GRAAL_VERSION
+LABEL maintainer=latusikl@gmail.com
+
+ENV JAVA_HOME=/opt/graalvm-ce-java$JAVA_VERSION-$GRAAL_VERSION
+ENV PATH=/opt/gradle-$GRADLE_VERSION/bin:/opt/graalvm-ce-java$JAVA_VERSION-$GRAAL_VERSION/bin:$PATH
+
+RUN apt-get update \
+    && apt-get install build-essential libz-dev zlib1g-dev wget unzip -y \
+    && wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-$GRAAL_VERSION/graalvm-ce-java$JAVA_VERSION-linux-amd64-$GRAAL_VERSION.tar.gz \
+    && tar -xzf graalvm-ce-java$JAVA_VERSION-linux-amd64-$GRAAL_VERSION.tar.gz \
+    && rm graalvm-ce-java$JAVA_VERSION-linux-amd64-$GRAAL_VERSION.tar.gz \
+    && ./graalvm-ce-java$JAVA_VERSION-$GRAAL_VERSION/bin/gu install native-image \
+    && wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
+    && unzip gradle-$GRADLE_VERSION-bin.zip \
+    && rm gradle-$GRADLE_VERSION-bin.zip \
+    && apt-get purge wget -y \
+    && apt-get purge unzip -y \
+    && apt-get autoclean \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD java -version && gradle -v
