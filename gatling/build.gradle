@@ -1,0 +1,22 @@
+plugins {
+	id 'java'
+	id 'io.gatling.gradle' version '3.7.5'
+}
+
+// Documentation https://gatling.io/docs/gatling/reference/current/extensions/gradle_plugin/
+gatling {
+	logLevel = 'INFO'
+	logHttp = 'ALL'
+	jvmArgs = [
+			'-server',
+			'-Xmx64G',
+			'-XX:+HeapDumpOnOutOfMemoryError',
+			'-XX:+UseG1GC',
+			'-XX:+ParallelRefProcEnabled',
+			'-XX:MaxInlineLevel=20',
+			'-XX:MaxTrivialSize=12',
+			'-XX:-UseBiasedLocking'
+	]
+}
+
+
