@@ -1,0 +1,24 @@
+name: Build spring-boot-reactive-native
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - develop
+      - feature/*
+    paths:
+      - '.github/workflows/build-test-spring-boot-reactive-native.yml'
+      - 'spring-boot/spring-boot-reactive-native/**'
+      - '!spring-boot/spring-boot-reactive-native/README.md'
+      - '!spring-boot/spring-boot-reactive-native/gralde/**'
+      - '!spring-boot/spring-boot-reactive-native/graldew.bat'
+      - '!spring-boot/spring-boot-reactive-native/graldew'
+jobs:
+  build-and-test:
+    uses: latusikl/comparative-analysis/.github/workflows/build-test-gradle.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: spring-boot/spring-boot-reactive-native

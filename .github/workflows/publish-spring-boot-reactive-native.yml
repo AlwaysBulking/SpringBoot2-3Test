@@ -1,0 +1,25 @@
+name: Publish spring-boot-reactive-native
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/publish-spring-boot-reactive-native.yml'
+      - 'spring-boot/spring-boot-reactive-native/**'
+      - '!spring-boot/spring-boot-reactive-native/README.md'
+      - '!spring-boot/spring-boot-reactive-native/gralde/**'
+      - '!spring-boot/spring-boot-reactive-native/graldew.bat'
+      - '!spring-boot/spring-boot-reactive-native/graldew'
+      
+jobs:
+  build-image-and-publish:
+    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: spring-boot/spring-boot-reactive-native
+      image-tag: spring-boot-reactive-native
+      dockerfile-name: Dockerfile-native
+    secrets:
+      REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      USR: ${{ secrets.DOCKER_USR }}
+      KEY: ${{ secrets.DOCKER_KEY }}

@@ -1,0 +1,31 @@
+name: Publish base image for JAR and native build
+on:
+  push:
+    branches:
+      - main
+      - feature/native-images
+    paths:
+      - '.github/workflows/publish-base-jar.yml'
+      - 'base-images/Dockerfile-jar'
+      - 'base-images/Dockerfile-native'
+jobs:
+  build-image-and-publish-jar:
+    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: base-images
+      image-tag: base-debian-jdk17-gradle7.4.1
+      dockerfile-name: Dockerfile-jar
+    secrets:
+      REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      USR: ${{ secrets.DOCKER_USR }}
+      KEY: ${{ secrets.DOCKER_KEY }}
+  build-image-and-publish-native:
+    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: base-images
+      image-tag: base-debian-jdk17-graal20.0.0.2-gradle7.4.1
+      dockerfile-name: Dockerfile-native
+    secrets:
+      REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      USR: ${{ secrets.DOCKER_USR }}
+      KEY: ${{ secrets.DOCKER_KEY }}

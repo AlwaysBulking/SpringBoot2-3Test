@@ -1,0 +1,25 @@
+name: Publish micronaut-reactive-native
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/publish-micronaut-reactive-native.yml'
+      - 'micronaut/micronaut-reactive/**'
+      - '!micronaut/micronaut-reactive/README.md'
+      - '!micronaut/micronaut-reactive/gralde/**'
+      - '!micronaut/micronaut-reactive/graldew.bat'
+      - '!micronaut/micronaut-reactive/graldew'
+      
+jobs:
+  build-image-and-publish:
+    uses: latusikl/comparative-analysis/.github/workflows/publish-image.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: micronaut/micronaut-reactive
+      image-tag: micronaut-reactive-native
+      dockerfile-name: Dockerfile-native
+    secrets:
+      REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      USR: ${{ secrets.DOCKER_USR }}
+      KEY: ${{ secrets.DOCKER_KEY }}

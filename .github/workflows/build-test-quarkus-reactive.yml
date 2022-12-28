@@ -1,0 +1,24 @@
+name: Build quarkus-reactive
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - develop
+      - feature/*
+    paths:
+      - '.github/workflows/build-test-quarkus-reactive.yml'
+      - 'quarkus/quarkus-reactive/**'
+      - '!quarkus/quarkus-reactive/README.md'
+      - '!quarkus/quarkus-reactive/gralde/**'
+      - '!quarkus/quarkus-reactive/graldew.bat'
+      - '!quarkus/quarkus-reactive/graldew'
+jobs:
+  build-and-test:
+    uses: latusikl/comparative-analysis/.github/workflows/build-test-gradle.yml@fd872d2c9039a85a1e9f0d4a179b7eb7255f07f3
+    with:
+      application-dir: quarkus/quarkus-reactive
