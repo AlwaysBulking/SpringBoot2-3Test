@@ -1,9 +1,9 @@
 name: Publish base image for JAR and native build
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-      - feature/native-images
     paths:
       - '.github/workflows/publish-base-jar.yml'
       - 'base-images/Dockerfile-jar'
