@@ -1,0 +1,34 @@
+server:
+  port: 8082
+  error:
+    include-message: always
+spring:
+#  jmx:
+#    enabled: true
+  webflux:
+    base-path: /api
+  r2dbc:
+    name: ${DB_NAME}
+    username: ${DB_USR}
+    password: ${DB_PSW}
+    url: r2dbc:postgresql://${DB_URL}/${DB_NAME}?schema=${DB_SCHEMA}
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        r2dbc: DEBUG
+
+greetings:
+  sse-count: 10
+
+google.api:
+  user-email: ${SERVICE_USR_EMAIL}
+  privateKey: ${PRIVATE_KEY}
+  scopes: ${SCOPES}
+  storage-api-url: https://storage.googleapis.com
+  auth-url: https://oauth2.googleapis.com/token
+  grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+  bucket-name: ${BUCKET_NAME}
+code:
+  days-till-removal: 30

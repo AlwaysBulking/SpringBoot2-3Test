@@ -1,0 +1,22 @@
+#Build native executable
+FROM latusikl/comparative-analysis:base-debian-jdk17-graal20.0.0.2-gradle7.4.1 as appBuild
+WORKDIR /opt
+COPY . .
+RUN gradle nativeCompile --no-daemon
+
+FROM debian:bullseye
+ARG EXECUTABLE="/opt/build/native/nativeCompile/spring-boot-reactive-native"
+ARG USER="latusikl"
+#Create system group called $USER then add new user that do not have password (cannot login),
+#has empty GECOS field (name, surname etc.), has no home direcotry, has no login shell and is assigned to created group.
+RUN    addgroup --system $USER && \
+        adduser --disabled-password  \
+                --system \
+                --gecos "" \
+                --no-create-home  \
+                --shell /usr/sbin/nologin  \
+                --ingroup $USER $USER
+USER $USER
+COPY --from=appBuild ${EXECUTABLE} /opt/micronaut-reactive
+ENTRYPOINT ["./opt/micronaut-reactive","-Xmx2G"]
+EXPOSE 8082
