@@ -7,11 +7,12 @@ spring:
 #    enabled: true
   webflux:
     base-path: /api
+  # Variabili hardcoded per comodità di testing
   r2dbc:
-    name: ${DB_NAME}
-    username: ${DB_USR}
-    password: ${DB_PSW}
-    url: r2dbc:postgresql://${DB_URL}/${DB_NAME}?schema=${DB_SCHEMA}
+    name: postgres
+    username: adri
+    password: password
+    url: r2dbc:postgresql://172.17.0.2:5432/postgres?schema=analysis
 
 #logging:
 #  level:
